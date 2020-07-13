@@ -1,0 +1,5 @@
+# 2D_06 - Monster_AI
+
+자세한 사항은 코드 참고
+
+Animator의 Parameter를 int형으로 해줌

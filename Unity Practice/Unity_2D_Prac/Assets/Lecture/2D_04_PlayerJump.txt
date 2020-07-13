@@ -1,0 +1,10 @@
+# 2D_04 - Player_Jump
+
+코드 참조
+
+*중력값
+Project Setting - Physics 2D 에서 중력 값 설정 가능(y값 조정하면됨)
+
+Gravity Scale : 오브젝트에 적용되는 중력 비율
+
+LayerMask : 물리효과를 구분하는 정수값

@@ -1,0 +1,20 @@
+2D_01 - 2D Basic
+
+Camera - Rendering Path : 원근법을 쓰냐 안쓰냐의 결정
+			Perspective 사용시 z축의 이동에따라 오브젝트 크기 변경
+
+
+Sprite - Order in Layer : 물건의 배치 순서. 값이 높을수록 위로 얹어짐. z축을 변경해서도 할 수 있긴함
+	Sorting Layer : 레이어 배치 순서값을 미리 정해놓고 설정 가능
+
+2D Project에서는 이미지를 불러오면 바로 Sprite(2D and UI)로 바뀜
+
+도트그래픽 기준
+Sprite Option - Filter Mode : Point로 해야 깔끔해짐
+		Default - Compression : None을함(압축률)
+
+
+Pixels Per Unit - 이미지 크기로 결정
+
+Edit - Project Settings - Default Contact Offset : 충돌 여백
+낮은 픽셀(특히 도트)할때는 필수로 0을 만들어주자

@@ -1,0 +1,21 @@
+# 2D_03 - Player_Move
+
+자세한 사항은 코드참조
+
+*Player
+Sprite Renderer - Flip : 축의 반전을 사용. 주로 방향이동시 사용
+			코드를 사용해 반전 가능
+
+Rigidbody - Constraints - Freeze Rotation : 2D이용시 z축을 얼려 회전을 방지
+	  - Linear Drag : 공기저항. 아예없으면 마찰력이 0인 바닥에서 계속 미끄러짐(2정도가 좋음)
+
+*Floor
+Create - Physics Material 2D - Friction : 마찰력. 0을 만들어야 언덕오를때 좋음
+
+
+*Animation
+Make Transition : 다음으로 변경될 애니메이션을 연결할 때 사용. 역으로도 해야됨
+Parameters : 애니메이션을 변경할때 사용할 변수. 주로 bool 많이 사용.
+그 후 애니메이션 끼리 연결된 화살표를 누른 후 
+Inspector 창에서 Transitions에서 변수 설정해주기.
+Has Exit Time은 0으로 해주자. 애니메이션이 남아있는 시간을 설정하는 것이기 때문.

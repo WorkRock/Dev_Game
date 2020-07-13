@@ -1,0 +1,56 @@
+Basic_09
+1. 중력 적용하기
+
+Object의 Add Component에 rigidbody 검색 및 추가
+RigidBody : 물리효과를 받기 위한 컴포넌트
+(중력의 영향을 받게되는 상태가 된다)
+
+
+2. 충돌 영역 정하기
+Collider : 물리효과를 받기 위한 컴포넌트
+Collider가 없으면 물체가 있어도 통과하고 계속
+중력의 영향을 받으며 떨어진다
+※충돌 기준은 보이는 것이 아닌 Collider에 따른다
+
+
+3. RigidBody 설정
+Mass : 무게 ( 수치가 높을수록 충돌이 무거워지게됨 )
+Use Gravity : 중력 사용 여부
+Is Kinematic : 외부 물리효과를 무시
+(스크립트를 통해서 이동시킬때만 이동하겠다)
+-> 움직이는 함정(장애물)을 만들때 유용하다
+
+
+4. 재질 만들기
+Material : 오브젝트의 표면 재질을 결정하는 컴포넌트
+Create -> Material
+재질 편집은 새로 생성해야 편집 가능.
+
+Metalic : 금속 재질 수치
+Smoothness : 빛 반사 수치
+Texture : 재질에 들어가는 이미지
+Albedo 옆의 비어있는 상자에 사진(그림)을 넣으면
+Object에 texture의 적용이 가능하다
+Tiling : 텍스쳐 반복 타일 개수
+Emission : 텍스쳐 발광(밝기)조절
+빛이 물리적으로 나오는게 아니라 재질적으로 빛이 나오는것
+
+
+5. 물리 재질 만들기
+Create -> Physic Material
+Physic Material : 탄성과 마찰을 다루는 물리적인 재질
+
+Fricitoin : 마찰력, 낮을수록 많이 미끄러짐
+Dynamic Fricitoin : 움직일때 적용되는 마찰력
+Static Fricitoin : 정지했을때 적용되는 마찰력
+※보통 정지마찰력이 움직이는것보다 큼
+Friction Combine : 다음 마찰력을 계산하는 방식
+(주로 Minimum을 이용한다고 함)
+
+Bounciness : 탄성력, 높을수록 많이 튀어오름
+Bounce Combine : 다음 탄성을 계산하는 방식
+(주로 Maximum을 이용한다고 함)
+
+
+☆물체 필수 요소★
+Mesh, Material, Collider, RigidBody (+Physic Material)

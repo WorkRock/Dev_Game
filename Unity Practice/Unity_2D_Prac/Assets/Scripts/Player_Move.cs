@@ -23,6 +23,7 @@ public class Player_Move : MonoBehaviour
         // Jump
         if (Input.GetButtonDown("Jump") && !anim.GetBool("isJumping"))
         {
+            rigid.velocity = new Vector2(rigid.velocity.x, 0); // 점프높이초기화로 피격후 슈퍼점프 방지
             rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
             anim.SetBool("isJumping", true);
         }
@@ -81,5 +82,39 @@ public class Player_Move : MonoBehaviour
             }
         }
         
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.tag == "Enemy")
+        {
+            // Debug.Log("플레이어가 히트당함");
+            OnDamaged(collision.transform.position);
+        }
+    }
+
+    
+    void OnDamaged(Vector2 targetPos)
+    {
+        // Change Layer (Immortal Active)
+        gameObject.layer = 11; // 레이어를 바꾸어 피격 안당하게 조정
+
+        // View Alpha
+        spriteRenderer.color = new Color(1, 1, 1, 0.4f); // 살짝 투명하게 변경
+
+        // Reaction Force
+        int direcion = transform.position.x - targetPos.x > 0 ? 1 : -1; // 방향 설정
+        rigid.AddForce(new Vector2(direcion, 1)*7, ForceMode2D.Impulse); // 살짝 튀어오름
+
+        // Animation
+        anim.SetTrigger("isDamaged"); // 트리거를 실행시켜 피격 애니메이션 실행
+
+        Invoke("OffDamaged", 2); // 2초후 다시 원상복귀 하도록 조정
+    }
+
+    public void OffDamaged() 
+    {
+        gameObject.layer = 10; // 레이어를 기존 플레이어 레이어로 변경해서 원상 복귀
+        spriteRenderer.color = new Color(1, 1, 1, 1); // 투명도 다시 원상복귀
     }
 }

@@ -4,17 +4,22 @@ using UnityEngine;
 
 public class Player_Move : MonoBehaviour
 {
-    public float maxSpeed;
-    public float jumpPower;
     Rigidbody2D rigid;
     SpriteRenderer spriteRenderer;
     Animator anim;
+    CapsuleCollider2D capsuleCollider;
+
+    public GameManager gameManager;
+    public float maxSpeed;
+    public float jumpPower;
+    public bool isDIe = false;
 
     void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
+        capsuleCollider = GetComponent<CapsuleCollider2D>();
 
     }
 
@@ -36,7 +41,7 @@ public class Player_Move : MonoBehaviour
         }
 
         // Direction Sprite
-        if (Input.GetButtonDown("Horizontal"))
+        if (Input.GetButton("Horizontal"))
         {
             spriteRenderer.flipX = Input.GetAxisRaw("Horizontal") == -1;
         }
@@ -88,14 +93,57 @@ public class Player_Move : MonoBehaviour
     {
         if(collision.gameObject.tag == "Enemy")
         {
-            // Debug.Log("플레이어가 히트당함");
-            OnDamaged(collision.transform.position);
+            // Attack
+            if (rigid.velocity.y < 0 && transform.position.y > collision.transform.position.y)
+            {
+                OnAttack(collision.transform);
+            }
+            else // Debug.Log("플레이어가 히트당함");
+                OnDamaged(collision.transform.position);
         }
     }
 
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.gameObject.tag == "Item")
+        {
+            // Point
+            bool isBCoin = collision.gameObject.name.Contains("BCoin");
+            bool isSCoin = collision.gameObject.name.Contains("SCoin");
+            bool isGCoin = collision.gameObject.name.Contains("GCoin");
+            
+            if(isBCoin)
+                gameManager.stagePoint += 50;
+            else if(isSCoin)
+                gameManager.stagePoint += 100;
+            else if(isGCoin)
+                gameManager.stagePoint += 300;
+
+            // Deactive Item
+            collision.gameObject.SetActive(false);
+        }
+        else if(collision.gameObject.tag == "Finish")
+        {
+            // Next Stage
+            gameManager.NextStage();
+        }
+    }
+
+    void OnAttack(Transform enemy)
+    {
+        // Point
+        gameManager.stagePoint += 100;
+
+        // EnemyDie
+        Monster_Move monsterMove = enemy.GetComponent<Monster_Move>();
+        monsterMove.OnDamaged();
+    }
     
     void OnDamaged(Vector2 targetPos)
     {
+        // Health Down
+        gameManager.HealthDown();
+        
         // Change Layer (Immortal Active)
         gameObject.layer = 11; // 레이어를 바꾸어 피격 안당하게 조정
 
@@ -116,5 +164,20 @@ public class Player_Move : MonoBehaviour
     {
         gameObject.layer = 10; // 레이어를 기존 플레이어 레이어로 변경해서 원상 복귀
         spriteRenderer.color = new Color(1, 1, 1, 1); // 투명도 다시 원상복귀
+    }
+
+    public void OnDie()
+    {
+        // Sprite Alpha
+        spriteRenderer.color = new Color(1, 1, 1, 0.4f);
+
+        // Sprite Flip Y
+        spriteRenderer.flipY = true;
+
+        // Colider Disable
+        capsuleCollider.enabled = false;
+
+        // Die Effect Jump
+        rigid.AddForce(Vector2.up * 5, ForceMode2D.Impulse);
     }
 }

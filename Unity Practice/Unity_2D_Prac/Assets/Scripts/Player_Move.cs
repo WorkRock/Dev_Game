@@ -4,15 +4,23 @@ using UnityEngine;
 
 public class Player_Move : MonoBehaviour
 {
+    public GameManager gameManager;
+    public AudioClip audioJump;
+    public AudioClip audioAttack;
+    public AudioClip audioDamaged;
+    public AudioClip audioItem;
+    public AudioClip audioDie;
+    public AudioClip audioFinish;
+
+    public float maxSpeed;
+    public float jumpPower;
+    public bool isDIe = false;
+
     Rigidbody2D rigid;
     SpriteRenderer spriteRenderer;
     Animator anim;
     CapsuleCollider2D capsuleCollider;
-
-    public GameManager gameManager;
-    public float maxSpeed;
-    public float jumpPower;
-    public bool isDIe = false;
+    AudioSource audioSource;
 
     void Awake()
     {
@@ -20,7 +28,39 @@ public class Player_Move : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
         capsuleCollider = GetComponent<CapsuleCollider2D>();
+        audioSource = GetComponent<AudioSource>();
+    }
 
+    void PlaySound(string action)
+    {
+        switch (action)
+        {
+            case "JUMP":
+                audioSource.clip = audioJump;
+                audioSource.Play();
+                break;
+            case "ATTACK":
+                audioSource.clip = audioAttack;
+                audioSource.Play();
+                break;
+            case "DAMAGED":
+                audioSource.clip = audioDamaged;
+                audioSource.Play();
+                break;
+            case "ITEM":
+                audioSource.clip = audioItem;
+                audioSource.Play();
+                break;
+            case "DIE":
+                audioSource.clip = audioDie;
+                audioSource.Play();
+                break;
+            case "FINISH":
+                audioSource.clip = audioFinish;
+                audioSource.Play();
+                break;
+
+        }
     }
 
     void Update() // 단발적인 키 입력은 Update를 사용하자
@@ -31,6 +71,7 @@ public class Player_Move : MonoBehaviour
             rigid.velocity = new Vector2(rigid.velocity.x, 0); // 점프높이초기화로 피격후 슈퍼점프 방지
             rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
             anim.SetBool("isJumping", true);
+            PlaySound("JUMP");
         }
 
         // Stop Speed
@@ -95,11 +136,10 @@ public class Player_Move : MonoBehaviour
         {
             // Attack
             if (rigid.velocity.y < 0 && transform.position.y > collision.transform.position.y)
-            {
-                OnAttack(collision.transform);
-            }
+                OnAttack(collision.transform);  
             else // Debug.Log("플레이어가 히트당함");
                 OnDamaged(collision.transform.position);
+            
         }
     }
 
@@ -107,6 +147,9 @@ public class Player_Move : MonoBehaviour
     {
         if(collision.gameObject.tag == "Item")
         {
+            // Sound
+            PlaySound("ITEM");
+
             // Point
             bool isBCoin = collision.gameObject.name.Contains("BCoin");
             bool isSCoin = collision.gameObject.name.Contains("SCoin");
@@ -126,11 +169,15 @@ public class Player_Move : MonoBehaviour
         {
             // Next Stage
             gameManager.NextStage();
+            PlaySound("FINISH");
         }
     }
 
     void OnAttack(Transform enemy)
     {
+        // Sound
+        PlaySound("ATTACK");
+
         // Point
         gameManager.stagePoint += 100;
 
@@ -141,6 +188,9 @@ public class Player_Move : MonoBehaviour
     
     void OnDamaged(Vector2 targetPos)
     {
+        // Sound
+        PlaySound("DAMAGED");
+
         // Health Down
         gameManager.HealthDown();
         
@@ -168,6 +218,9 @@ public class Player_Move : MonoBehaviour
 
     public void OnDie()
     {
+        // Sound
+        PlaySound("DIE");
+
         // Sprite Alpha
         spriteRenderer.color = new Color(1, 1, 1, 0.4f);
 
@@ -179,5 +232,10 @@ public class Player_Move : MonoBehaviour
 
         // Die Effect Jump
         rigid.AddForce(Vector2.up * 5, ForceMode2D.Impulse);
+    }
+
+    public void VelocityZero()
+    {
+        rigid.velocity = Vector2.zero;
     }
 }

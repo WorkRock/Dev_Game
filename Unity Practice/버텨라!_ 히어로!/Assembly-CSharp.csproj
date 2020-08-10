@@ -60,6 +60,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\02.Scripts\S_InGame\Player_Move.cs" />
     <Compile Include="Assets\02.Scripts\S_Intro\Act_SceneLoad_Menu.cs" />
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>C:/Users/admin/Desktop/Git/Dev_Game/Unity Practice/버텨라!_ 히어로!/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>

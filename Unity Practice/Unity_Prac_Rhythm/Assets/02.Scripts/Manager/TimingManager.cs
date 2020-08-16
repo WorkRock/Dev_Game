@@ -10,10 +10,14 @@ public class TimingManager : MonoBehaviour
     Vector2[] timingBoxs = null; // 판정 범위 최소값
 
     EffectManager theEffect;
+    ScoreManager theScoreManager;
+    ComboManager theComboManager;
 
    void Start()
     {
         theEffect = FindObjectOfType<EffectManager>();
+        theScoreManager = FindObjectOfType<ScoreManager>();
+        theComboManager = FindObjectOfType<ComboManager>();
 
         // 타이밍 박스 설정
         timingBoxs = new Vector2[timingRect.Length];
@@ -35,16 +39,23 @@ public class TimingManager : MonoBehaviour
             {
                 if(timingBoxs[x].x <= t_notePosX && t_notePosX <= timingBoxs[x].y)
                 {
+                    // 노트 제거
                     boxNoteList[i].GetComponent<Note>().HideNote();
-                    if(x < timingBoxs.Length - 1)
-                        theEffect.NoteHitEffect();
                     boxNoteList.RemoveAt(i);
+
+                    // 이펙트 연출
+                    if (x < timingBoxs.Length - 1)
+                        theEffect.NoteHitEffect(); 
                     theEffect.JudgementEffect(x);
+
+                    // 점수 증가
+                    theScoreManager.IncreaseScore(x);
                     return;
                 }
             }
         }
 
+        theComboManager.ResetCombo();
         theEffect.JudgementEffect(timingBoxs.Length);
     }
 }

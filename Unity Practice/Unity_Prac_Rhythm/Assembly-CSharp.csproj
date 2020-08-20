@@ -68,8 +68,11 @@
     <Compile Include="Assets\02.Scripts\Manager\Note.cs" />
     <Compile Include="Assets\02.Scripts\Manager\NoteManager.cs" />
     <Compile Include="Assets\02.Scripts\Manager\ScoreManager.cs" />
+    <Compile Include="Assets\02.Scripts\Manager\Stage.cs" />
+    <Compile Include="Assets\02.Scripts\Manager\StageManager.cs" />
     <Compile Include="Assets\02.Scripts\Manager\TimingManager.cs" />
     <Compile Include="Assets\02.Scripts\ObjectPool.cs" />
+    <Compile Include="Assets\02.Scripts\Plate\BasicPlate.cs" />
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>C:/Users/admin/Desktop/Git/Dev_Game/Unity Practice/Unity_Prac_Rhythm/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>

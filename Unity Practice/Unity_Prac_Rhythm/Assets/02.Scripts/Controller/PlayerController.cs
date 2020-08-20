@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour
     // 이동
     [SerializeField] float moveSpeed = 3;
     Vector3 dir = new Vector3();
-    Vector3 destPos = new Vector3();
+    public Vector3 destPos = new Vector3();
     
     // 회전
     [SerializeField] float spinSpeed = 270;
@@ -39,6 +39,8 @@ public class PlayerController : MonoBehaviour
         {
             if (canMove)
             {
+                Calc();
+
                 if (theTimingManager.CheckTiming())
                 {
                     StartAction();
@@ -47,10 +49,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void StartAction()
+    void Calc()
     {
         // 방향 계산
-        dir.Set(Input.GetAxisRaw("Vertical"),0, Input.GetAxisRaw("Horizontal"));
+        dir.Set(Input.GetAxisRaw("Vertical"), 0, Input.GetAxisRaw("Horizontal"));
 
         // 이동 목표값 계산
         destPos = transform.position + new Vector3(-dir.x, 0, dir.z);
@@ -59,6 +61,11 @@ public class PlayerController : MonoBehaviour
         rotDir = new Vector3(-dir.z, 0f, -dir.x);
         fakeCube.RotateAround(transform.position, rotDir, spinSpeed);
         destRot = fakeCube.rotation;
+    }
+
+    void StartAction()
+    {
+
 
         StartCoroutine(MoveCo());
         StartCoroutine(SpinCo());
